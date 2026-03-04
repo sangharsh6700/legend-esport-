@@ -13,7 +13,15 @@
             --highlight: #ff00ea;
         }
 
+        /* FIX: This forces the colors to show up when saving as PDF */
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+        }
+
         body {
+            background: #0f0c29; /* Fallback */
             background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #8100ba);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -33,12 +41,10 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* --- LEGEND ESPORTS HEADER --- */
         .main-header {
             text-align: center;
             margin-bottom: 40px;
             position: relative;
-            z-index: 10;
         }
 
         .title-container {
@@ -53,7 +59,7 @@
         .main-title {
             transform: skewX(20deg);
             font-size: 60px;
-            color: #000;
+            color: #000 !important;
             margin: 0;
             text-transform: uppercase;
             letter-spacing: -2px;
@@ -63,7 +69,7 @@
 
         .subtitle {
             background: var(--accent-color);
-            color: #000;
+            color: #000 !important;
             display: inline-block;
             padding: 5px 20px;
             transform: skewX(-20deg) translateY(-10px);
@@ -78,7 +84,6 @@
             transform: skewX(20deg);
         }
 
-        /* --- CONTROLS --- */
         .controls {
             margin-bottom: 25px;
             display: flex;
@@ -86,7 +91,7 @@
         }
 
         button {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--primary-color);
             color: white;
             border: 2px solid var(--accent-color);
             padding: 12px 25px;
@@ -94,21 +99,10 @@
             font-weight: bold;
             text-transform: uppercase;
             transform: skewX(-20deg);
-            transition: 0.3s;
         }
 
-        button span {
-            display: inline-block;
-            transform: skewX(20deg);
-        }
+        button span { display: inline-block; transform: skewX(20deg); }
 
-        button:hover {
-            background: var(--accent-color);
-            color: #000;
-            box-shadow: 0 0 20px var(--accent-color);
-        }
-
-        /* --- LEADERBOARD TABLE --- */
         .container {
             width: 100%;
             max-width: 1000px;
@@ -119,7 +113,7 @@
             gap: 10px;
             margin-bottom: 10px;
             align-items: center;
-            transition: 0.2s;
+            page-break-inside: avoid;
         }
 
         .box {
@@ -132,7 +126,6 @@
             border: none;
             min-height: 48px;
             box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
-            transition: 0.2s;
         }
 
         .box span {
@@ -140,60 +133,51 @@
             display: inline-block;
             width: 100%;
             text-align: center;
-            white-space: nowrap;
             font-weight: 900;
         }
 
-        /* Specific Column Styles */
-        .col-num { width: 70px; background: #fff; color: #000; font-size: 24px; }
-        .col-name-head { width: 40%; background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); }
-        .col-name-row { width: 40%; background: var(--primary-color); color: #fff; text-align: left; padding: 0 20px; border-left: 5px solid var(--accent-color); }
+        .col-num { width: 70px; background: #fff !important; color: #000 !important; font-size: 24px; }
+        .col-name-head { width: 40%; background: rgba(255,255,255,0.2) !important; border: 1px solid #fff; }
+        .col-name-row { width: 40%; background: var(--primary-color) !important; color: #fff !important; text-align: left; padding: 0 20px; border-left: 5px solid var(--accent-color); }
         
-        .col-stat-head { width: 12%; background: #fff; color: #000; font-style: italic; font-size: 14px; }
-        .col-stat-row { width: 12%; background: #e0e0e0; color: #000; font-size: 22px; }
+        .col-stat-head { width: 12%; background: #fff !important; color: #000 !important; font-size: 14px; }
+        .col-stat-row { width: 12%; background: #e0e0e0 !important; color: #000 !important; font-size: 22px; }
 
-        /* Editable Focus State */
         .box:focus {
             background: var(--highlight) !important;
             color: #fff !important;
-            box-shadow: 0 0 15px var(--highlight);
         }
 
-        .header-row .box {
-            min-height: 40px;
-            background: #fff;
-            color: #000;
-        }
-
-        /* Delete Button */
         .btn-del {
-            background: #ff4b2b;
-            color: white;
+            background: #ff4b2b !important;
+            color: white !important;
             width: 35px;
             height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            opacity: 0;
-            transition: 0.3s;
             transform: skewX(-20deg);
             margin-left: 10px;
-            font-family: sans-serif;
             font-weight: bold;
         }
 
-        .row:hover .btn-del { opacity: 1; }
-
+        /* PRINT SETTINGS */
         @media print {
-            .controls, .btn-del { display: none; }
-            body { background: white; color: black; }
+            body {
+                background: #0f0c29 !important; /* Keep a dark background in PDF */
+            }
+            .controls, .btn-del {
+                display: none !important; /* Hide buttons on the final save */
+            }
+            .main-title, .subtitle, .col-num, .col-stat-head {
+                color: #000 !important;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- TOP TITLE SECTION -->
 <div class="main-header">
     <div class="title-container">
         <h1 class="main-title" contenteditable="true">LEGEND ESPORTS</h1>
@@ -210,17 +194,14 @@
 </div>
 
 <div class="container">
-    <!-- Header Row -->
     <div class="row header-row">
         <div class="box col-num" contenteditable="true"><span>#</span></div>
-        <div class="box col-name-head" contenteditable="true"><span>TEAM NAME / PLAYER</span></div>
+        <div class="box col-name-head" contenteditable="true"><span>TEAM / PLAYER</span></div>
         <div class="box col-stat-head" contenteditable="true"><span>WIN</span></div>
         <div class="box col-stat-head" contenteditable="true"><span>POS.</span></div>
         <div class="box col-stat-head" contenteditable="true"><span>KILLS</span></div>
         <div class="box col-stat-head" contenteditable="true"><span>TOTAL</span></div>
     </div>
-
-    <!-- Table Body -->
     <div id="table-body"></div>
 </div>
 
@@ -231,7 +212,6 @@
     function addRow() {
         rowCount++;
         const displayNum = rowCount < 10 ? '0' + rowCount : rowCount;
-        
         const row = document.createElement('div');
         row.className = 'row';
         row.innerHTML = `
@@ -246,12 +226,8 @@
         tableBody.appendChild(row);
     }
 
-    // Initialize with 12 slots as requested
-    for (let i = 0; i < 12; i++) {
-        addRow();
-    }
+    for (let i = 0; i < 12; i++) { addRow(); }
 
-    // Prevent enter key from creating new lines in editable boxes
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && e.target.hasAttribute('contenteditable')) {
             e.preventDefault();
