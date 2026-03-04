@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable Leaderboard</title>
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: 'Arial Black', Gadget, sans-serif;
+            display: flex;
+            justify-content: center;
+            padding: 40px 10px;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        /* The Slanted Shape */
+        .box {
+            transform: skewX(-20deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            outline: none;
+            border: none;
+            min-height: 45px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Text correction inside the slant */
+        .box span {
+            transform: skewX(20deg);
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        /* Specific Column Styles */
+        .col-num { width: 60px; background: #fff; color: #000; font-size: 22px; }
+        .col-name-head { width: 45%; background: #fff; }
+        .col-name-row { width: 45%; background: #8100ba; color: #fff; text-align: left; padding: 0 15px; }
+        .col-stat-head { width: 12%; background: #fff; color: #000; font-style: italic; font-weight: 900; }
+        .col-stat-row { width: 12%; background: #cccccc; color: #000; font-size: 20px; }
+
+        /* Editable Focus State */
+        .box:focus {
+            box-shadow: inset 0 0 0 3px #000;
+        }
+
+        /* Header specific tweak */
+        .header-row .box { min-height: 35px; font-size: 18px; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row header-row">
+        <div class="box col-num" contenteditable="true"><span>#</span></div>
+        <div class="box col-name-head" contenteditable="true"><span></span></div>
+        <div class="box col-stat-head" contenteditable="true"><span>WIN</span></div>
+        <div class="box col-stat-head" contenteditable="true"><span>POS.</span></div>
+        <div class="box col-stat-head" contenteditable="true"><span>KILLS</span></div>
+        <div class="box col-stat-head" contenteditable="true"><span>TOTAL</span></div>
+    </div>
+
+    <div id="table-body"></div>
+</div>
+
+<script>
+    const tableBody = document.getElementById('table-body');
+    for (let i = 1; i <= 12; i++) {
+        const rowNum = i < 10 ? '0' + i : i;
+        const rowHtml = `
+            <div class="row">
+                <div class="box col-num" contenteditable="true"><span>${rowNum}</span></div>
+                <div class="box col-name-row" contenteditable="true"><span></span></div>
+                <div class="box col-stat-row" contenteditable="true"><span></span></div>
+                <div class="box col-stat-row" contenteditable="true"><span></span></div>
+                <div class="box col-stat-row" contenteditable="true"><span></span></div>
+                <div class="box col-stat-row" contenteditable="true"><span></span></div>
+            </div>
+        `;
+        tableBody.insertAdjacentHTML('beforeend', rowHtml);
+    }
+</script>
+
+</body>
+</html>
