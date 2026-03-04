@@ -3,284 +3,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legend Esports Leaderboard</title>
+    <title>Legend Esports Pro Series</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap');
+
         :root {
-            --primary-color: #cf60ff;
-            --accent-color: #cf60ff;
-            --bg-dark: #ffffff;
-            --text-white: #ffffff;
-            --highlight: hsl(305, 82%, 78%);
+            --primary-purple: #9d00ff;
+            --bg-white: #ffffff;
+            --shadow: 0px 5px 15px rgba(0,0,0,0.1);
         }
 
-        body {
-            background: linear-gradient(-45deg, #ffffff, #ffffff, #979797, #837e83);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            font-family: 'Arial Black', Gadget, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 10px;
-            margin: 0;
-            color: var(--text-white);
-            min-height: 100vh;
-            /* CRITICAL FOR PDF COLORS */
+        /* FIX: This forces the browser to show colors when saving/printing */
+        * {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* --- LEGEND ESPORTS HEADER --- */
-        .main-header {
-            text-align: center;
-            margin-bottom: 40px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .title-container {
-            display: inline-block;
-            transform: skewX(-20deg);
-            background: #ffffff;
-            padding: 10px 60px;
-            box-shadow: 10px 10px 0px var(--accent-color);
-            border-left: 10px solid var(--primary-color);
-        }
-
-        .main-title {
-            transform: skewX(20deg);
-            font-size: 60px;
-            color: #000000;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
-            text-transform: uppercase;
-            letter-spacing: -2px;
-            line-height: 1;
-            outline: none;
+            padding: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .subtitle {
-            background: var(--accent-color);
-            color: #202020;
-            display: inline-block;
-            padding: 5px 20px;
-            transform: skewX(-20deg) translateY(-10px);
-            margin-left: 50px;
-            font-size: 18px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .subtitle span {
-            display: block;
-            transform: skewX(20deg);
-        }
-
-        /* --- CONTROLS --- */
+        /* UI Control Buttons (Hidden on Save) */
         .controls {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             display: flex;
             gap: 15px;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
         }
 
-        button {
-            background: rgba(253, 4, 4, 0.1);
-            color: rgb(0, 0, 0);
-            border: 2px solid var(--accent-color);
+        .btn {
             padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
             text-transform: uppercase;
-            transform: skewX(-20deg);
-            transition: 0.3s;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        button span {
-            display: inline-block;
-            transform: skewX(20deg);
-        }
+        .btn-add { background: #333; color: white; }
+        .btn-save { background: var(--primary-purple); color: white; }
 
-        button:hover {
-            background: var(--accent-color);
-            color: #ff0000;
-            box-shadow: 0 0 20px var(--accent-color);
-        }
-
-        /* --- LEADERBOARD TABLE --- */
+        /* Main Container */
         .container {
+            background-color: var(--bg-white);
+            width: 900px;
+            padding: 60px;
+            min-height: 1000px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+        }
+
+        /* --- HEADER BOX FIXED --- */
+        .header-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: 100%;
-            max-width: 1000px;
+            margin-bottom: 40px;
+        }
+
+        .title-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .side-accent {
+            width: 10px;
+            height: 70px;
+            background: var(--primary-purple);
+            transform: skewX(-25deg);
+            flex-shrink: 0;
+        }
+
+        h1 {
+            font-size: 70px;
+            font-weight: 900;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            outline: none;
+            text-align: center;
+        }
+
+        .sub-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-top: 5px;
+            text-transform: uppercase;
+            outline: none;
+        }
+
+        .bottom-line {
+            width: 80%;
+            height: 12px;
+            background: var(--primary-purple);
+            margin-top: 20px;
+            transform: skewX(-45deg);
+        }
+
+        /* --- TABLE DESIGN --- */
+        .leaderboard {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .row {
             display: flex;
             gap: 10px;
-            margin-bottom: 10px;
-            align-items: center;
-            transition: 0.2s;
         }
 
         .box {
+            background: #fff;
+            box-shadow: var(--shadow);
             transform: skewX(-20deg);
             display: flex;
             align-items: center;
             justify-content: center;
-            text-transform: uppercase;
-            outline: none;
-            border: none;
-            min-height: 48px;
-            box-shadow: 4px 4px 10px rgba(68, 0, 255, 0.3);
-            transition: 0.2s;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
+            padding: 12px 5px;
+            border: 1px solid #f0f0f0;
         }
 
-        .box span {
+        .box div {
             transform: skewX(20deg);
-            display: inline-block;
-            width: 100%;
-            text-align: center;
-            white-space: nowrap;
             font-weight: 900;
+            font-size: 18px;
+            text-align: center;
+            width: 100%;
+            outline: none;
         }
 
-        /* Column Styles */
-        .col-num { width: 70px; background: #bebcbc; color: #000000; font-size: 24px; }
-        .col-name-head { width: 40%; background: rgba(196, 193, 193, 0.2); backdrop-filter: blur(5px); }
-        
-        /* Team Name Row - We will make text black here as requested */
-        .col-name-row { 
-            width: 40%; 
-            background: var(--primary-color); 
-            color: #000000; /* Text is now Black */
-            text-align: left; 
-            padding: 0 20px; 
-            border-left: 5px solid var(--accent-color); 
-        }
-        
-        .col-stat-head { width: 12%; background: #c0bebe; color: #000; font-style: italic; font-size: 14px; }
-        .col-stat-row { width: 12%; background: #d4d1d1; color: #000; font-size: 22px; }
+        /* Column Widths */
+        .w-rank { width: 70px; }
+        .w-name { width: 400px; position: relative; color: #000000; text-align: left !important; }
+        .w-stat { width: 90px; color: #000; }
+        .w-total { width: 110px; }
 
-        /* Editable Focus State */
-        .box:focus {
-            background: var(--highlight) !important;
-            color: #aaaaaa !important;
+        /* Row Decorations */
+        .data-row .w-name::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 20%;
+            height: 60%;
+            width: 5px;
+            background: var(--primary-purple);
         }
 
-        .header-row .box {
-            min-height: 40px;
-            background: hsl(0, 0%, 69%);
-            color: #000000;
+        .head-row .box {
+            background: none;
+            box-shadow: none;
+            border: none;
         }
 
-        /* Delete Button */
-        .btn-del {
-            background: #ff4b2b;
-            color: white;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            transition: 0.3s;
-            transform: skewX(-20deg);
-            margin-left: 10px;
-            font-family: sans-serif;
-            font-weight: bold;
+        .head-row .box div {
+            font-size: 14px;
+            font-style: italic;
+            color: #000;
         }
 
-        .row:hover .btn-del { opacity: 1; }
-
-        /* --- PDF / PRINT FIXES --- */
+        /* Print Settings */
         @media print {
-            body {
-                background: linear-gradient(-45deg, #ff0000, #302b63, #24243e, #8100ba) !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            .controls, .btn-del { display: none !important; }
-            
-            /* Keeping the Purple background but ensuring text is black */
-            .col-name-row {
-                background-color: #dba5fa !important;
-                color: #000 !important;
-            }
-            .box {
-                box-shadow: none !important;
-            }
-            .subtitle {
-                background-color: #a052ee !important;
-            }
+            body { background: white; padding: 0; }
+            .controls { display: none !important; }
+            .container { box-shadow: none; width: 100%; padding: 20px; }
         }
     </style>
 </head>
 <body>
 
-<div class="main-header">
-    <div class="title-container">
-        <h1 class="main-title" contenteditable="true">LEGEND ESPORTS</h1>
+    <div class="controls">
+        <button class="btn btn-add" onclick="addRow()">+ Add Player</button>
+        <button class="btn btn-save" onclick="window.print()">Save/Download</button>
     </div>
-    <br>
-    <div class="subtitle" contenteditable="true">
-        <span>PRO TOURNAMENT SERIES</span>
-    </div>
-</div>
 
-<div class="controls">
-    <button onclick="addRow()"><span>+ ADD NEW SLOT</span></button>
-    <button onclick="window.print()"><span>SAVE / PRINT PDF</span></button>
-</div>
-
-<div class="container">
-    <div class="row header-row">
-        <div class="box col-num" contenteditable="true"><span>#</span></div>
-        <div class="box col-name-head" contenteditable="true"><span>TEAM NAME / PLAYER</span></div>
-        <div class="box col-stat-head" contenteditable="true"><span>WIN</span></div>
-        <div class="box col-stat-head" contenteditable="true"><span>POS.</span></div>
-        <div class="box col-stat-head" contenteditable="true"><span>KILLS</span></div>
-        <div class="box col-stat-head" contenteditable="true"><span>TOTAL</span></div>
-    </div>
-    <div id="table-body"></div>
-</div>
-
-<script>
-    const tableBody = document.getElementById('table-body');
-    let rowCount = 0;
-
-    function addRow() {
-        rowCount++;
-        const displayNum = rowCount < 10 ? '0' + rowCount : rowCount;
+    <div class="container">
         
-        const row = document.createElement('div');
-        row.className = 'row';
-        row.innerHTML = `
-            <div class="box col-num" contenteditable="true"><span>${displayNum}</span></div>
-            <div class="box col-name-row" contenteditable="true"><span>ENTER NAME</span></div>
-            <div class="box col-stat-row" contenteditable="true"><span>0</span></div>
-            <div class="box col-stat-row" contenteditable="true"><span>0</span></div>
-            <div class="box col-stat-row" contenteditable="true"><span>0</span></div>
-            <div class="box col-stat-row" contenteditable="true"><span>0</span></div>
-            <div class="btn-del" onclick="this.parentElement.remove()"><span>X</span></div>
-        `;
-        tableBody.appendChild(row);
-    }
+        <!-- Header -->
+        <div class="header-box">
+            <div class="title-row">
+              
+                <h1 contenteditable="true">LEGEND ESPORTS</h1>
+               
+            </div>
+            <div class="sub-title" contenteditable="true">PRO TOURNAMENT SERIES</div>
+            <div class="bottom-line"></div>
+        </div>
 
-    for (let i = 0; i < 12; i++) { addRow(); }
+        <div class="leaderboard" id="player-list">
+            <!-- Headers -->
+            <div class="row head-row">
+                <div class="box w-rank"><div contenteditable="true">#</div></div>
+                <div class="box w-name"><div contenteditable="true">CS LEGEND</div></div>
+                <div class="box w-stat"><div contenteditable="true">WIN</div></div>
+                <div class="box w-stat"><div contenteditable="true">POS.</div></div>
+                <div class="box w-stat"><div contenteditable="true">KILLS</div></div>
+                <div class="box w-total"><div contenteditable="true">TOTAL</div></div>
+            </div>
 
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && e.target.hasAttribute('contenteditable')) {
-            e.preventDefault();
-            e.target.blur();
+            <!-- Pre-filled Slots -->
+            <div class="row data-row">
+                <div class="box w-rank"><div contenteditable="true">01</div></div>
+                <div class="box w-name"><div contenteditable="true">ARYAN</div></div>
+                <div class="box w-stat"><div contenteditable="true">50</div></div>
+                <div class="box w-stat"><div contenteditable="true">1</div></div>
+                <div class="box w-stat"><div contenteditable="true">100</div></div>
+                <div class="box w-total"><div contenteditable="true"></div></div>
+            </div>
+
+            <div class="row data-row">
+                <div class="box w-rank"><div contenteditable="true">02</div></div>
+                <div class="box w-name"><div contenteditable="true">BHUSHAN</div></div>
+                <div class="box w-stat"><div contenteditable="true">20</div></div>
+                <div class="box w-stat"><div contenteditable="true">2</div></div>
+                <div class="box w-stat"><div contenteditable="true">50</div></div>
+                <div class="box w-total"><div contenteditable="true"></div></div>
+            </div>
+
+            <div class="row data-row">
+                <div class="box w-rank"><div contenteditable="true">03</div></div>
+                <div class="box w-name"><div contenteditable="true">SANGHARSH</div></div>
+                <div class="box w-stat"><div contenteditable="true">10</div></div>
+                <div class="box w-stat"><div contenteditable="true">3</div></div>
+                <div class="box w-stat"><div contenteditable="true">10</div></div>
+                <div class="box w-total"><div contenteditable="true"></div></div>
+            </div>
+            
+            <!-- Added 7 more empty slots to reach 10 total -->
+            <script>
+                for(let i=4; i<=10; i++){
+                    document.write(`
+                    <div class="row data-row">
+                        <div class="box w-rank"><div contenteditable="true">${i < 10 ? '0'+i : i}</div></div>
+                        <div class="box w-name"><div contenteditable="true">PLAYER NAME</div></div>
+                        <div class="box w-stat"><div contenteditable="true">0</div></div>
+                        <div class="box w-stat"><div contenteditable="true">0</div></div>
+                        <div class="box w-stat"><div contenteditable="true">0</div></div>
+                        <div class="box w-total"><div contenteditable="true"></div></div>
+                    </div>
+                    `);
+                }
+            </script>
+        </div>
+    </div>
+
+    <script>
+        function addRow() {
+            const list = document.getElementById('player-list');
+            const rowCount = document.querySelectorAll('.data-row').length + 1;
+            const rankStr = rowCount < 10 ? '0' + rowCount : rowCount;
+
+            const newRow = document.createElement('div');
+            newRow.className = 'row data-row';
+            newRow.innerHTML = `
+                <div class="box w-rank"><div contenteditable="true">${rankStr}</div></div>
+                <div class="box w-name"><div contenteditable="true">PLAYER NAME</div></div>
+                <div class="box w-stat"><div contenteditable="true">0</div></div>
+                <div class="box w-stat"><div contenteditable="true">0</div></div>
+                <div class="box w-stat"><div contenteditable="true">0</div></div>
+                <div class="box w-total"><div contenteditable="true"></div></div>
+            `;
+            list.appendChild(newRow);
         }
-    });
-</script>
-
+    </script>
 </body>
 </html>
